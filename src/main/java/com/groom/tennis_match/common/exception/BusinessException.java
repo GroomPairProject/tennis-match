@@ -1,5 +1,7 @@
 package com.groom.tennis_match.common.exception;
 
+import com.groom.tennis_match.common.constant.ErrorCode;
+
 public class BusinessException  extends RuntimeException {
     private final ErrorCode errorCode;
 

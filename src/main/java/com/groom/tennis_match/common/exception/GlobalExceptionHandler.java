@@ -1,5 +1,6 @@
 package com.groom.tennis_match.common.exception;
 
+import com.groom.tennis_match.common.constant.ErrorCode;
 import com.groom.tennis_match.common.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
