@@ -2,7 +2,6 @@ package com.groom.tennis_match.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
