@@ -29,7 +29,7 @@ public enum ErrorCode {
     USER_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "U004", "이미 삭제된 사용자입니다."),
 
     // External Service
-    EXTERNAL_API_ERROR(HttpStatus.BAD_GATEWAY, "E001", "외부 API 호출에 실패했습니다."),
+    EXTERNAL_API_ERROR(HttpStatus.BAD_GATEWAY, "E001", "외부 API 호출에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
