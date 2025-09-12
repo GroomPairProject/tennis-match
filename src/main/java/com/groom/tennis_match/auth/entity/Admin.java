@@ -45,7 +45,7 @@ public class Admin extends BaseEntity implements UserDetails {
     @Builder.Default
     private short passwordMiss = 0;
 
-    @Column
+    @Column(nullable = false)
     @Builder.Default
     private boolean isLock = false;
 

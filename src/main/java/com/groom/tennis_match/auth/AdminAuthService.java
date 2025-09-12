@@ -30,6 +30,7 @@ public class AdminAuthService {
                 .email("admin@admin.com")
                 .name("최고 권한")
                 .role("ADMIN")
+                .phone("010-1234-5678")
                 .build();
 
 
