@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AdminAuthService {
 
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
