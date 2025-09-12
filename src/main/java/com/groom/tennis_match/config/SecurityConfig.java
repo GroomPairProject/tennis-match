@@ -21,8 +21,8 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
-            ;
-//            .headers(headers -> headers.frameOptions().disable()); // H2 콘솔을 위한 설정
+            .headers(headers -> headers.frameOptions().disable()) // H2 콘솔을 위한 설정
+        ;
 
         return http.build();
     }
