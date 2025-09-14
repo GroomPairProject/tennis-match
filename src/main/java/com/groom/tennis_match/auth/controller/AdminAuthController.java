@@ -3,7 +3,6 @@ package com.groom.tennis_match.auth.controller;
 import com.groom.tennis_match.auth.AdminAuthService;
 import com.groom.tennis_match.auth.dto.AdminAccountCreateDTO;
 import com.groom.tennis_match.auth.dto.AdminAccountRegisterDTO;
-import com.groom.tennis_match.auth.dto.AdminSignUpDTO;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
 import jakarta.validation.Valid;
