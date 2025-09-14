@@ -1,11 +1,15 @@
 package com.groom.tennis_match.auth.controller;
 
 import com.groom.tennis_match.auth.AdminAuthService;
+import com.groom.tennis_match.auth.dto.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.dto.AdminSignUpDTO;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +25,8 @@ public class AdminAuthController {
      * @return
      */
     @PostMapping("/accounts")
-    public ApiResponse<AdminSignUpDTO> signUp() {
-        AdminSignUpDTO admin = adminAuthService.registerAdmin();
+    public ApiResponse<AdminAccountRegisterDTO> signUp(@Valid @RequestBody AdminAccountCreateDTO adminAccountCreateDTO) {
+        AdminAccountRegisterDTO admin = adminAuthService.registerAccount(adminAccountCreateDTO);
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
     }
 
