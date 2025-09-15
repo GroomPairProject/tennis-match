@@ -2,10 +2,13 @@
 spring:
   application:
     name: tennis-match
+#  profiles:
+#    active:
+#      - test
   datasource:
-    url: jdbc:mysql://localhost:3308/tennis?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: tennis
-    password: tennis1234
+    url: jdbc:mysql://localhost:3306/tennis_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: tennis_user
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
