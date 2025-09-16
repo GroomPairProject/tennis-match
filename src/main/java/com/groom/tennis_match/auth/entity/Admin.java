@@ -1,6 +1,7 @@
 package com.groom.tennis_match.auth.entity;
 
 import com.groom.tennis_match.common.entity.BaseEntity;
+import com.groom.tennis_match.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude="password")
-public class Admin extends BaseEntity implements UserDetails {
+public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,12 +51,18 @@ public class Admin extends BaseEntity implements UserDetails {
     private boolean isLock = false;
 
     @Column
-    private String profileImageUrl;
+    private String profileImgUrl;
 
     // Todo : enum type refactoring
     @Column(length = 20)
     @Builder.Default
     private String role = "ADMIN";
+
+    @Column(length = 50)
+    private Long createdBy;
+
+    @Column(length = 50)
+    private Long updatedBy;
 
 
     @Override
