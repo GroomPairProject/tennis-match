@@ -3,14 +3,14 @@ spring:
   application:
     name: tennis-match
   datasource:
-    url: jdbc:mysql://localhost:3308/tennis?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: tennis
-    password: tennis1234
+    url: jdbc:mysql://localhost:3306/tennis
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: none    # 개발 중에는 update, 배포 시에는 validate 또는 none 추천
+      ddl-auto: create-drop    # 개발 중에는 create-drop 사용
     show-sql: true         # 실행되는 SQL 로그 출력
     properties:
       hibernate:
@@ -19,6 +19,12 @@ spring:
   devtools:
     restart:
       exclude: static/**,public/**,resources/**,META-INF/**,*.properties
+
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
 
   server:
     error:
