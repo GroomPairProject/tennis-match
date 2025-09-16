@@ -70,6 +70,20 @@ public enum ErrorCode {
     /** 카테고리 삭제 실패 */
     CATEGORY_DELETE_FAILED(HttpStatus.BAD_REQUEST, "C105", "카테고리 삭제에 실패했습니다."),
 
+    // ==================== 클럽(협회) 관련 ====================
+    /** 클럽을 찾을 수 없음 */
+    CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "CL001", "협회 정보 없음"),
+    /** 클럽 생성 실패 */
+    CLUB_CREATE_FAILED(HttpStatus.BAD_REQUEST, "CL002", "클럽 생성에 실패했습니다."),
+    /** 클럽 수정 실패 */
+    CLUB_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "CL003", "클럽 정보 수정에 실패했습니다."),
+    /** 클럽 삭제 실패 */
+    CLUB_DELETE_FAILED(HttpStatus.BAD_REQUEST, "CL004", "클럽 삭제에 실패했습니다."),
+    /** 이미 클럽에 가입됨 */
+    CLUB_ALREADY_JOINED(HttpStatus.CONFLICT, "CL005", "이미 클럽에 가입되어 있습니다."),
+    /** 클럽에 가입되지 않음 */
+    CLUB_NOT_JOINED(HttpStatus.BAD_REQUEST, "CL006", "클럽에 가입되어 있지 않습니다."),
+
     // ==================== 매치 관련 ====================
     /** 매치를 찾을 수 없음 */
     MATCH_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "매치를 찾을 수 없습니다."),

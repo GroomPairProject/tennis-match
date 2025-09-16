@@ -45,19 +45,29 @@ public enum SuccessCode {
     /** 카테고리 삭제 성공 */
     CATEGORY_DELETE_SUCCESS("S204", "카테고리가 성공적으로 삭제되었습니다"),
     
+    // ==================== 클럽(협회) 관련 ====================
+    /** 클럽 생성 성공 */
+    CLUB_CREATE_SUCCESS("S301", "클럽이 성공적으로 생성되었습니다"),
+    /** 클럽 조회 성공 */
+    CLUB_READ_SUCCESS("S302", "클럽 정보를 성공적으로 조회했습니다"),
+    /** 클럽 수정 성공 */
+    CLUB_UPDATE_SUCCESS("S303", "클럽 정보가 성공적으로 수정되었습니다"),
+    /** 클럽 삭제 성공 */
+    CLUB_DELETE_SUCCESS("S304", "클럽이 성공적으로 삭제되었습니다"),
+    
     // ==================== 매치 관련 ====================
     /** 매치 생성 성공 */
-    MATCH_CREATE_SUCCESS("S301", "매치가 성공적으로 생성되었습니다"),
+    MATCH_CREATE_SUCCESS("S401", "매치가 성공적으로 생성되었습니다"),
     /** 매치 조회 성공 */
-    MATCH_READ_SUCCESS("S302", "매치 정보를 성공적으로 조회했습니다"),
+    MATCH_READ_SUCCESS("S402", "매치 정보를 성공적으로 조회했습니다"),
     /** 매치 수정 성공 */
-    MATCH_UPDATE_SUCCESS("S303", "매치 정보가 성공적으로 수정되었습니다"),
+    MATCH_UPDATE_SUCCESS("S403", "매치 정보가 성공적으로 수정되었습니다"),
     /** 매치 삭제 성공 */
-    MATCH_DELETE_SUCCESS("S304", "매치가 성공적으로 삭제되었습니다"),
+    MATCH_DELETE_SUCCESS("S404", "매치가 성공적으로 삭제되었습니다"),
     /** 매치 참가 성공 */
-    MATCH_JOIN_SUCCESS("S305", "매치 참가가 성공적으로 완료되었습니다"),
+    MATCH_JOIN_SUCCESS("S405", "매치 참가가 성공적으로 완료되었습니다"),
     /** 매치 참가 취소 성공 */
-    MATCH_LEAVE_SUCCESS("S306", "매치 참가 취소가 성공적으로 완료되었습니다");
+    MATCH_LEAVE_SUCCESS("S406", "매치 참가 취소가 성공적으로 완료되었습니다");
     
     /** 성공 코드 */
     private final String code;
