@@ -7,10 +7,7 @@ import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +24,17 @@ public class AdminAuthController {
     public ApiResponse<AdminAccountRegisterDTO> signUp(@Valid @RequestBody AdminAccountCreateDTO adminAccountCreateDTO) {
         AdminAccountRegisterDTO admin = adminAuthService.registerAccount(adminAccountCreateDTO);
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
+    }
+
+    @GetMapping("/admin-register-temp")
+    public String initService() {
+        adminAuthService.createTestAdmin("testAdmin",
+                                "1234",
+                                    "최고 권한",
+                                    "admin@test.com",
+                                    "010-12340-5678");
+
+        return "noice";
     }
 
 //    @PostMapping("/accounts")

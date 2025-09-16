@@ -17,8 +17,8 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-    logger.info("Exception Type : " + exception.getClass().getName());
-    logger.info("Exception Message : " + exception.getMessage());
+    log.info("Exception Type : " + exception.getClass().getName());
+    log.info("Exception Message : " + exception.getMessage());
 
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401 인증 실패
     response.getWriter().write("fail");

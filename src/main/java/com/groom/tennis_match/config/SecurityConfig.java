@@ -96,7 +96,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(
                                 new AntPathRequestMatcher("/h2-console/**"),
-                                new AntPathRequestMatcher("/api/admin/auth/login")
+                                new AntPathRequestMatcher("/api/admin/**")
                         )
                 )
 
@@ -117,10 +117,10 @@ public class SecurityConfig {
                 // 인가 규칙: 꼭 필요한 곳만 열기
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/admin/auth/login").permitAll()
+                        .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
-                        .requestMatchers("/api/admin/**").authenticated()
+//                        .requestMatchers("/api/admin/**").authenticated()
                         // 그 외는 프로젝트 규칙에 맞게 정의
                         .anyRequest().authenticated()
                 )

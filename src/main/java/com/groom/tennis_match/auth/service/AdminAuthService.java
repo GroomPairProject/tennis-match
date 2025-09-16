@@ -116,4 +116,45 @@ public class AdminAuthService {
         return username;
     }
 
+    /**
+     * 테스트용 Admin 계정 생성 메서드
+     * @param username 로그인 ID
+     * @param rawPassword 평문 비밀번호
+     * @param name 이름
+     * @param email 이메일
+     * @param phone 전화번호
+     * @return 생성된 Admin
+     */
+    public Admin createTestAdmin(String username,
+                                 String rawPassword,
+                                 String name,
+                                 String email,
+                                 String phone) {
+
+//        // Admin 엔티티 생성
+//        Admin admin = Admin.builder()
+//                .username(username)
+//                .password(encodedPassword)
+//                .email(createDTO.getEmail())
+//                .name(createDTO.getName())
+//                .role(createDTO.getRole().name())
+//                .phone(createDTO.getPhone())
+//                .build();
+
+        Admin admin = Admin.builder()
+                .adminId(1L)
+                .username(username)
+                .password(passwordEncoder.encode(rawPassword))
+                .name(name)
+                .role(AdminRole.ADMIN.name())
+                .email(email)
+                .phone(phone)
+                .isActive(true)
+                .isLock(false)
+                .passwordMiss((short) 0)
+                .build();
+
+        return adminRepository.save(admin);
+    }
+
 }
