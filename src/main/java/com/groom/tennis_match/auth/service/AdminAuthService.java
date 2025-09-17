@@ -142,7 +142,6 @@ public class AdminAuthService {
 //                .build();
 
         Admin admin = Admin.builder()
-                .adminId(1L)
                 .username(username)
                 .password(passwordEncoder.encode(rawPassword))
                 .name(name)

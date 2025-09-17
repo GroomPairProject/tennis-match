@@ -20,7 +20,7 @@ import java.util.List;
 public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
 
     @Column(length = 20, nullable = false)
