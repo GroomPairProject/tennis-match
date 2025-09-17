@@ -89,6 +89,7 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
+                .securityContext(sc -> sc.requireExplicitSave(false))   // 세션 발급
                 // 세션 기반: 필요 시 생성
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
