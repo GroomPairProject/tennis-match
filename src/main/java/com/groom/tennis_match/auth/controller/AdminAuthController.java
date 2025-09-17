@@ -26,6 +26,11 @@ public class AdminAuthController {
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
     }
 
+    /**
+     * 관리자용 초기화 핸들러 메서드
+     * 테스트에서만 사용하시오
+     * @return
+     */
     @GetMapping("/admin-register-temp")
     public String initService() {
         adminAuthService.createTestAdmin("testAdmin",
