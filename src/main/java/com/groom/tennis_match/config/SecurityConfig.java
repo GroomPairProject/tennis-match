@@ -95,32 +95,32 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
                 // CSRF: 기본 활성화, 특정 경로만 예외 (H2, JSON 로그인)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(
-                                new AntPathRequestMatcher("/h2-console/**"),
-                                new AntPathRequestMatcher("/api/admin/**")
-                        )
+                // 현재 비활성화, 구현 예정
+                .csrf(csrf -> csrf.disable()
+//                        .ignoringRequestMatchers(
+//                                new AntPathRequestMatcher("/h2-console/**"),
+//                                new AntPathRequestMatcher("/api/admin/**")
+//                        )
                 )
 
                 // H2 콘솔 프레임 허용(로컬 개발용)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
 
-                // 폼 로그인은 비활성화(우리는 JSON 로그인 사용)
+                // 폼 로그인 비활성화(우리는 JSON 로그인 사용)
                 .formLogin(form -> form.disable())
-
                 // 로그아웃
                 .logout(logout -> logout
                         .logoutUrl("/api/admin/auth/logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .logoutSuccessHandler(logoutSuccessHandler) // 로깅 핸들러
                 )
 
                 // 인가 규칙: 꼭 필요한 곳만 열기
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
+//                        .requestMatchers("/actuator/health").permitAll()
                         // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
 //                        .requestMatchers("/api/admin/**").authenticated()
                         // 그 외는 프로젝트 규칙에 맞게 정의
