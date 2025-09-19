@@ -19,15 +19,15 @@ public class AdminDetailsService  implements UserDetailsService {
 
   @Override
   public Admin loadUserByUsername(String username) throws UsernameNotFoundException {
-    log.debug("Spring Security loadUserByUsername 호출: username={}", username);
+    log.info("AdminDetailsService loadUserByUsername 호출: username={}", username);
 
     Admin user = adminRepository.findByUsername(username)
             .orElseThrow(() -> {
-              log.warn("Spring Security - 사용자 없음: username={}", username);
+              log.warn("AdminDetailsService - 사용자 없음: username={}", username);
               return new UsernameNotFoundException("User not found: " + username);
             });
 
-    log.debug("Spring Security - 사용자 로드 성공: username={}, authorities={}",
+    log.info("AdminDetailsService - 사용자 로드 성공: username={}, authorities={}",
             username, user.getAuthorities());
     return user;
   }
