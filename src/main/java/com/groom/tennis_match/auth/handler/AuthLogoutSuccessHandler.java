@@ -14,19 +14,20 @@ import java.io.IOException;
 public class AuthLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-    super.onLogoutSuccess(request, response, authentication);
 
     String username = "Anonymous";
 
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    log.info(authentication.getPrincipal().toString());
+
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails u) {
       username = u.getUsername();
     }
+
     log.info("로그아웃 성공. 세션 삭제. username={}", username);
 
     response.setStatus(200);
-    response.setContentType("application/json;charset=UTF-8");
-    response.getWriter().write("{\"message\":\"logout success\"}");
-
+//    response.setContentType("application/json;charset=UTF-8");
+    response.getWriter().write("logout success");
   }
 }

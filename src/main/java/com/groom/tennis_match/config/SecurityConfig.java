@@ -1,7 +1,6 @@
 
 package com.groom.tennis_match.config;
 
-import com.groom.tennis_match.auth.service.AdminAuthService;
 import com.groom.tennis_match.auth.filter.JsonUsernamePasswordAuthFilter;
 import com.groom.tennis_match.auth.handler.AuthFailureHandler;
 import com.groom.tennis_match.auth.handler.AuthLogoutSuccessHandler;
@@ -114,12 +113,16 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler(logoutSuccessHandler) // 로깅 핸들러
+                        .permitAll()
                 )
 
                 // 인가 규칙: 꼭 필요한 곳만 열기
                 .authorizeHttpRequests(authz -> authz
+                        // preflight 허용
+//                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/actuator/health").permitAll()
                         // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
 //                        .requestMatchers("/api/admin/**").authenticated()
