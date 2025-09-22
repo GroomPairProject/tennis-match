@@ -1,11 +1,7 @@
-
 package com.groom.tennis_match.config;
 
 import com.groom.tennis_match.auth.filter.JsonUsernamePasswordAuthFilter;
-import com.groom.tennis_match.auth.handler.AuthAccessDeniedHandler;
-import com.groom.tennis_match.auth.handler.AuthFailureHandler;
-import com.groom.tennis_match.auth.handler.AuthLogoutSuccessHandler;
-import com.groom.tennis_match.auth.handler.AuthSuccessHandler;
+import com.groom.tennis_match.auth.handler.*;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -66,6 +63,9 @@ public class SecurityConfig {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() { return new AuthAccessDeniedHandler(); }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() { return new JsonAuthenticationEntryPoint(); }
+
     // Custom JSON login filter as a bean (AuthenticationManager 주입)
     @Bean
     public JsonUsernamePasswordAuthFilter jsonUsernamePasswordAuthFilter(
@@ -109,7 +109,8 @@ public class SecurityConfig {
 
                 // 접근 권한 부족 시 해당 핸들러 동작
                 .exceptionHandling(ex -> ex
-                        .accessDeniedHandler(accessDeniedHandler()) // unauthorized 반환
+                        .authenticationEntryPoint(authenticationEntryPoint()) // unauthorized 반환
+                        .accessDeniedHandler(accessDeniedHandler()) // 권한 부족, forbidden 반환
                 )
 
                 // H2 콘솔 프레임 허용(로컬 개발용)
