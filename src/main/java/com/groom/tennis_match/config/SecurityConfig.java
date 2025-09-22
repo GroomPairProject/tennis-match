@@ -107,7 +107,7 @@ public class SecurityConfig {
 //                        )
                 )
 
-                // 접근 권한 부족 시 해당 핸들러 이용
+                // 접근 권한 부족 시 해당 핸들러 동작
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(accessDeniedHandler()) // unauthorized 반환
                 )
@@ -132,7 +132,7 @@ public class SecurityConfig {
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/actuator/health").permitAll()
                         // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
 //                        .requestMatchers("/api/admin/**").authenticated()

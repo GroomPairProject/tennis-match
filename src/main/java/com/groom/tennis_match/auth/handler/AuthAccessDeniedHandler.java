@@ -23,7 +23,7 @@ public class AuthAccessDeniedHandler implements AccessDeniedHandler {
           throws IOException {
     ErrorResponse body = ErrorResponse.of("FORBIDDEN", "접근 권한이 없습니다.", request.getRequestURI());
 
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding("UTF-8");
 
