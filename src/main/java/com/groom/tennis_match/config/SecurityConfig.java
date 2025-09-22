@@ -1,10 +1,7 @@
-
 package com.groom.tennis_match.config;
 
 import com.groom.tennis_match.auth.filter.JsonUsernamePasswordAuthFilter;
-import com.groom.tennis_match.auth.handler.AuthFailureHandler;
-import com.groom.tennis_match.auth.handler.AuthLogoutSuccessHandler;
-import com.groom.tennis_match.auth.handler.AuthSuccessHandler;
+import com.groom.tennis_match.auth.handler.*;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -61,6 +60,12 @@ public class SecurityConfig {
         return new AuthLogoutSuccessHandler();
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() { return new AuthAccessDeniedHandler(); }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() { return new JsonAuthenticationEntryPoint(); }
+
     // Custom JSON login filter as a bean (AuthenticationManager 주입)
     @Bean
     public JsonUsernamePasswordAuthFilter jsonUsernamePasswordAuthFilter(
@@ -90,7 +95,7 @@ public class SecurityConfig {
 
         http
                 .securityContext(sc -> sc.requireExplicitSave(false))   // 세션 발급
-                // 세션 기반: 필요 시 생성
+                // 세션 기반
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
                 // CSRF: 기본 활성화, 특정 경로만 예외 (H2, JSON 로그인)
@@ -100,6 +105,12 @@ public class SecurityConfig {
 //                                new AntPathRequestMatcher("/h2-console/**"),
 //                                new AntPathRequestMatcher("/api/admin/**")
 //                        )
+                )
+
+                // 접근 권한 부족 시 해당 핸들러 동작
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint()) // unauthorized 반환
+                        .accessDeniedHandler(accessDeniedHandler()) // 권한 부족, forbidden 반환
                 )
 
                 // H2 콘솔 프레임 허용(로컬 개발용)
@@ -122,7 +133,7 @@ public class SecurityConfig {
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/actuator/health").permitAll()
                         // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
 //                        .requestMatchers("/api/admin/**").authenticated()

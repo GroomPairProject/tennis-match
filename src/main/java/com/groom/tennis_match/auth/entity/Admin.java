@@ -1,5 +1,6 @@
 package com.groom.tennis_match.auth.entity;
 
+import com.groom.tennis_match.auth.AdminRole;
 import com.groom.tennis_match.common.entity.BaseEntity;
 import com.groom.tennis_match.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -54,9 +55,9 @@ public class Admin extends BaseTimeEntity implements UserDetails {
     private String profileImgUrl;
 
     // Todo : enum type refactoring
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    @Builder.Default
-    private String role = "ADMIN";
+    private AdminRole role;
 
     @Column(length = 50)
     private Long createdBy;
@@ -67,7 +68,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(this.role);
     }
 
     @Override
