@@ -58,7 +58,7 @@ public class AdminAuthService {
                 .password(encodedPassword)
                 .email(createDTO.getEmail())
                 .name(createDTO.getName())
-                .role(createDTO.getRole().name())
+                .role(createDTO.getRole())
                 .phone(createDTO.getPhone())
                 .build();
 
@@ -145,7 +145,7 @@ public class AdminAuthService {
                 .username(username)
                 .password(passwordEncoder.encode(rawPassword))
                 .name(name)
-                .role(AdminRole.ADMIN.name())
+                .role(AdminRole.ADMIN)
                 .email(email)
                 .phone(phone)
                 .isActive(true)

@@ -41,7 +41,7 @@ public class SecurityContextUtil {
      */
     public AdminRole getCurrentUserRole() {
         Admin currentAdmin = getCurrentAdmin();
-        return AdminRole.valueOf(currentAdmin.getRole());
+        return AdminRole.valueOf(currentAdmin.getRole().name());
     }
 
     /**

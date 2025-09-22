@@ -1,6 +1,8 @@
 package com.groom.tennis_match.auth;
 
-public enum AdminRole {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum AdminRole implements GrantedAuthority {
     ADMIN(4), CHIEF_MANAGER(3), MANAGER(2), STAFF(1);
 
     private final int level;
@@ -11,6 +13,11 @@ public enum AdminRole {
 
     public int getLevel() {
         return level;
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.name();
     }
 
     /**
