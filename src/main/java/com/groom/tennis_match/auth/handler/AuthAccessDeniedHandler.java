@@ -21,7 +21,7 @@ public class AuthAccessDeniedHandler implements AccessDeniedHandler {
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex)
           throws IOException {
-    ErrorResponse body = ErrorResponse.of("FORBIDDEN", "접근 권한이 없습니다.", request.getRequestURI());
+    ErrorResponse body = ErrorResponse.of("FORBIDDEN", "접근 권한이 부족합니다.", request.getRequestURI());
 
     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
