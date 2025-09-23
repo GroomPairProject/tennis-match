@@ -1,8 +1,8 @@
 package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
-import com.groom.tennis_match.auth.dto.AdminAccountCreateDTO;
-import com.groom.tennis_match.auth.dto.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.common.constant.ErrorCode;
@@ -11,8 +11,6 @@ import com.groom.tennis_match.auth.util.PasswordUtil;
 import com.groom.tennis_match.auth.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
