@@ -1,5 +1,7 @@
 package com.groom.tennis_match.auth.controller;
 
+import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.service.AdminAuthService;
 import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
@@ -26,8 +28,11 @@ public class AdminAuthController {
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
     }
 
-//    @DeleteMapping("/withdraw")
-//    public ApiResponse<>
+    @DeleteMapping("/withdraw")
+    public ApiResponse<AdminAccountExpireResponseDTO> withdrawAccount(@Valid @RequestBody AdminAccountExpireDTO adminAccountExpireDTO) {
+        AdminAccountExpireResponseDTO admin = adminAuthService.withdrawAccount(adminAccountExpireDTO);
+        return ApiResponse.success(admin, SuccessCode.USER_DELETE_SUCCESS);
+    }
 
 
     /**
