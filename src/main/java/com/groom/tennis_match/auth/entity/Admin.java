@@ -37,6 +37,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
     private String email;
 
     @Column
+    @Setter
     @Builder.Default
     private boolean isActive = true;
 

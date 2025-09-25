@@ -1,4 +1,4 @@
-package com.groom.tennis_match.auth.dto;
+package com.groom.tennis_match.auth.dto.request;
 
 import lombok.*;
 

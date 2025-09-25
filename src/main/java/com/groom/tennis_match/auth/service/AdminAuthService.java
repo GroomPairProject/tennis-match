@@ -1,8 +1,10 @@
 package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
-import com.groom.tennis_match.auth.dto.AdminAccountCreateDTO;
-import com.groom.tennis_match.auth.dto.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.common.constant.ErrorCode;
@@ -11,8 +13,6 @@ import com.groom.tennis_match.auth.util.PasswordUtil;
 import com.groom.tennis_match.auth.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +95,42 @@ public class AdminAuthService {
                 .createdBy(currentUsername)
                 .build();
     }
-    
+
+    /**
+     * 자기 자신의 계정 만료 기능입니다.
+     * 권한을 확인하지 않습니다.
+     * @param accountDTO
+     * @return
+     */
+    public AdminAccountExpireResponseDTO withdrawAccount(AdminAccountExpireDTO accountDTO) {
+
+        accountDTO.getPassword();
+        String currentUsername = securityContextUtil.getCurrentUsername();
+
+        Admin currentUser = adminRepository.findByUsername(currentUsername).orElseThrow(
+                () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        if (passwordEncoder.matches(accountDTO.getPassword(), currentUser.getPassword())) {
+            if (accountDTO.getHardDelete()) {
+                adminRepository.delete(currentUser);
+            } else {
+                currentUser.setActive(false);
+                adminRepository.save(currentUser);
+            }
+        } else {
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        return AdminAccountExpireResponseDTO.builder()
+                .expired(true)
+                .hardDeleted(accountDTO.getHardDelete())
+                .username(currentUsername)
+                .build();
+    }
+
+
+
     /**
      * 사용자명 생성 로직
      * @param email 이메일 주소

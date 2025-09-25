@@ -1,4 +1,4 @@
-package com.groom.tennis_match.auth.dto;
+package com.groom.tennis_match.auth.dto.response;
 
 import com.groom.tennis_match.auth.AdminRole;
 import jakarta.validation.constraints.Email;
