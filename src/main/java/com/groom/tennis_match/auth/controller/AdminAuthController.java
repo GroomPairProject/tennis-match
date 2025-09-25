@@ -7,10 +7,14 @@ import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/auth")
@@ -28,9 +32,25 @@ public class AdminAuthController {
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
     }
 
+    /**
+     * 계정 탈퇴 핸들러 메소드입니다.
+     * @param adminAccountExpireDTO
+     * @return
+     */
     @DeleteMapping("/withdraw")
-    public ApiResponse<AdminAccountExpireResponseDTO> withdrawAccount(@Valid @RequestBody AdminAccountExpireDTO adminAccountExpireDTO) {
+    public ApiResponse<AdminAccountExpireResponseDTO> withdrawAccount(
+            @Valid @RequestBody AdminAccountExpireDTO adminAccountExpireDTO,
+            HttpServletRequest request) {
         AdminAccountExpireResponseDTO admin = adminAuthService.withdrawAccount(adminAccountExpireDTO);
+
+        // 2. 세션 만료 처리
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            log.info("탈퇴한 사용자 세션 만료 처리 완료. sessionId={}", session.getId());
+        }
+
+
         return ApiResponse.success(admin, SuccessCode.USER_DELETE_SUCCESS);
     }
 
