@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,15 @@ public class AdminMyPageController {
 
   @GetMapping("/admin/mypage")
   public ApiResponse<AdminProfileDTO> getAdminProfile(@AuthenticationPrincipal Admin admin) {
-    return ApiResponse.success(adminMyPageService.getAdminProfile(admin.getUsername()), SuccessCode.USER_UPDATE_SUCCESS);
+    return ApiResponse.success(
+            adminMyPageService.getAdminProfile(admin.getUsername()),
+            SuccessCode.USER_UPDATE_SUCCESS);
 
+  }
+
+  @PutMapping("/admin/mypage")
+  public ApiResponse<AdminProfileDTO> updateAdminProfile(@AuthenticationPrincipal Admin admin) {
+
+    return ApiResponse.success(SuccessCode.USER_UPDATE_SUCCESS);
   }
 }
