@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MyPageService {
+public class AdminMyPageService {
   private final AdminRepository adminRepository;
 
   public AdminProfileDTO getAdminProfile(String username) {
