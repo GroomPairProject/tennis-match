@@ -43,6 +43,7 @@ public class AdminMyPageService {
    * @param requestUsername - 현재 사용자 정보 수정을 위해 접근한 사용자입니다.
    * @return
    */
+  @Transactional
   public AdminProfileDTO updateAdminProfile(AdminProfileUpdateRequestDTO requestDTO, String requestUsername) {
     String username = requestDTO.getUsername();
     Admin admin = adminRepository.findByUsername(username)
@@ -50,7 +51,6 @@ public class AdminMyPageService {
               log.warn("AdminDetailsService - 사용자 없음: username={}", username);
               return new UsernameNotFoundException("User not found: " + username);
             });
-
     admin.applyProfileUpdate(requestDTO, passwordEncoder);
     adminRepository.save(admin);
 
