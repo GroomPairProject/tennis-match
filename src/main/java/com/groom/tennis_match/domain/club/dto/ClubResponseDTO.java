@@ -56,14 +56,8 @@ public class ClubResponseDTO {
     /** 생성 시간 */
     private LocalDateTime createAt;
 
-    /** 생성자 */
-    private Long creator;
-
     /** 수정 시간 */
     private LocalDateTime updatedAt;
-
-    /** 수정자 */
-    private Long editor;
 
     /**
      * Club 엔티티를 ClubResponseDTO로 변환
@@ -83,9 +77,7 @@ public class ClubResponseDTO {
                 .isActive(club.getIsActive())
                 .createDate(club.getCreateDate())
                 .createAt(club.getCreateAt())
-                .creator(club.getCreator())
                 .updatedAt(club.getUpdatedAt())
-                .editor(club.getEditor())
                 .build();
     }
 

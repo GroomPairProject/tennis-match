@@ -67,27 +67,19 @@ public class Club {
     private LocalDate createDate;
 
     /** 생성 시간 */
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private LocalDateTime createAt;
-
-    /** 생성자 */
-    @Column(name = "creator")
-    private Long creator;
 
     /** 수정 시간 */
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    /** 수정자 */
-    @Column(name = "editor")
-    private Long editor;
 
     /**
      * 클럽 정보 수정
      */
     public void updateClub(String clubName, String city, String district, String addressDetail,
                           Integer clubGender, String category, String clubDiv,
-                          String representativeName, Boolean isActive, Long editor) {
+                          String representativeName, Boolean isActive) {
         this.clubName = clubName;
         this.city = city;
         this.district = district;
@@ -98,15 +90,13 @@ public class Club {
         this.representativeName = representativeName;
         this.isActive = isActive;
         this.updatedAt = LocalDateTime.now();
-        this.editor = editor;
     }
 
     /**
      * 클럽 활성화 상태 변경
      */
-    public void changeActiveStatus(Boolean isActive, Long editor) {
+    public void changeActiveStatus(Boolean isActive) {
         this.isActive = isActive;
         this.updatedAt = LocalDateTime.now();
-        this.editor = editor;
     }
 }
