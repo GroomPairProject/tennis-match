@@ -3,13 +3,16 @@ package com.groom.tennis_match.auth.entity;
 import com.groom.tennis_match.auth.AdminRole;
 import com.groom.tennis_match.common.entity.BaseEntity;
 import com.groom.tennis_match.common.entity.BaseTimeEntity;
+import com.groom.tennis_match.domain.mypage.dto.AdminProfileUpdateRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 @Getter
 @Entity
@@ -65,6 +68,20 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Column(length = 50)
     private Long updatedBy;
+
+    public void applyProfileUpdate(AdminProfileUpdateRequestDTO dto,
+                                   PasswordEncoder passwordEncoder) {
+        if (dto.getName() != null) this.name = dto.getName();
+        if (dto.getPhone() != null) this.phone = dto.getPhone();
+        if (dto.getEmail() != null) this.email = dto.getEmail();
+        if (dto.getProfileImageUrl() != null) this.profileImgUrl = dto.getProfileImageUrl();
+
+        // 인코더 미전달 시 암호화하지 않음.
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            this.password = passwordEncoder.encode(dto.getPassword());
+        }
+    }
+
 
 
     @Override

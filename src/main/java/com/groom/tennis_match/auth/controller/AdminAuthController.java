@@ -3,7 +3,7 @@ package com.groom.tennis_match.auth.controller;
 import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
 import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.service.AdminAuthService;
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
@@ -27,8 +27,8 @@ public class AdminAuthController {
      * @return
      */
     @PostMapping("/accounts")
-    public ApiResponse<AdminAccountRegisterDTO> registerAccount(@Valid @RequestBody AdminAccountCreateDTO adminAccountCreateDTO) {
-        AdminAccountRegisterDTO admin = adminAuthService.registerAccount(adminAccountCreateDTO);
+    public ApiResponse<AdminAccountRegisterDTO> registerAccount(@Valid @RequestBody AdminAccountCreateResponseDTO adminAccountCreateResponseDTO) {
+        AdminAccountRegisterDTO admin = adminAuthService.registerAccount(adminAccountCreateResponseDTO);
         return ApiResponse.success(admin, SuccessCode.USER_CREATE_SUCCESS);
     }
 

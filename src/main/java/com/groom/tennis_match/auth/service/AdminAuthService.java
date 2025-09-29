@@ -2,7 +2,7 @@ package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
 import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.entity.Admin;
@@ -35,7 +35,7 @@ public class AdminAuthService {
      * @param createDTO 계정 생성 정보
      * @return 발급된 계정 정보 (아이디, 임시 비밀번호 포함)
      */
-    public AdminAccountRegisterDTO registerAccount(AdminAccountCreateDTO createDTO) {
+    public AdminAccountRegisterDTO registerAccount(AdminAccountCreateResponseDTO createDTO) {
         // 현재 사용자 권한 확인
         AdminRole currentUserRole = securityContextUtil.getCurrentUserRole();
         String currentUsername = securityContextUtil.getCurrentUsername();

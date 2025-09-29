@@ -1,5 +1,6 @@
 package com.groom.tennis_match.domain.mypage.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Getter
@@ -14,6 +15,7 @@ public class AdminProfileUpdateRequestDTO {
 
     private String phone;
 
+    @Email
     private String email;
 
     private String password;
