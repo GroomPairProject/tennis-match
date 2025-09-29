@@ -4,13 +4,11 @@ import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
 import com.groom.tennis_match.domain.mypage.dto.AdminProfileDTO;
+import com.groom.tennis_match.domain.mypage.dto.AdminProfileUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequestMapping("/api")
@@ -28,7 +26,10 @@ public class AdminMyPageController {
   }
 
   @PutMapping("/admin/mypage")
-  public ApiResponse<AdminProfileDTO> updateAdminProfile(@AuthenticationPrincipal Admin admin) {
+  public ApiResponse<AdminProfileDTO> updateAdminProfile(
+          @AuthenticationPrincipal Admin admin,
+          @RequestBody AdminProfileUpdateRequestDTO requestDTO) {
+    adminMyPageService.updateAdminProfile(requestDTO, admin.getUsername());
 
     return ApiResponse.success(SuccessCode.USER_UPDATE_SUCCESS);
   }
