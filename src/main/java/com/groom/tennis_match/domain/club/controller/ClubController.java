@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/admin/club")
+@RequestMapping("api/admin/club")
 @RequiredArgsConstructor
 public class ClubController {
 
