@@ -1,6 +1,6 @@
 package com.groom.tennis_match.auth;
 
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
@@ -61,7 +61,7 @@ class AdminAuthServiceTest {
   @DisplayName("계정 발급 성공 - 관리자 계정이 실제 DB에 저장되고 반환된다")
   void registerAccount_Success() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -97,7 +97,7 @@ class AdminAuthServiceTest {
   @DisplayName("계정 발급 시 비밀번호 암호화 검증 - 임시 비밀번호가 실제로 암호화되어 저장된다")
   void registerAccount_PasswordEncoding() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -124,7 +124,7 @@ class AdminAuthServiceTest {
   @DisplayName("계정 발급 시 엔티티 기본값 검증 - 기본값들이 올바르게 설정된다")
   void registerAccount_DefaultValues() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -147,7 +147,7 @@ class AdminAuthServiceTest {
   @DisplayName("계정 발급 결과 DTO 변환 검증 - 저장된 엔티티가 올바른 DTO로 변환된다")
   void registerAccount_DTOConversion() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -174,14 +174,14 @@ class AdminAuthServiceTest {
   @DisplayName("중복 계정 발급 테스트 - 여러 번 호출해도 각각 저장된다")
   void registerAccount_MultipleRegistrations() {
     // Given
-    AdminAccountCreateDTO createDTO1 = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO1 = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자1")
             .email("test1@example.com")
             .phone("010-1111-1111")
             .role(AdminRole.STAFF)
             .build();
 
-    AdminAccountCreateDTO createDTO2 = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO2 = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자2")
             .email("test2@example.com")
             .phone("010-2222-2222")
@@ -208,7 +208,7 @@ class AdminAuthServiceTest {
   @DisplayName("계정 발급 후 조회 테스트 - 저장된 계정을 username으로 조회할 수 있다")
   void registerAccount_FindByUsername() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -233,7 +233,7 @@ class AdminAuthServiceTest {
     // Given - MANAGER 권한을 가진 사용자가 CHIEF_MANAGER 권한으로 계정을 생성하려고 시도
     when(securityContextUtil.getCurrentUserRole()).thenReturn(AdminRole.MANAGER);
     
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")
@@ -250,14 +250,14 @@ class AdminAuthServiceTest {
   @DisplayName("사용자명 중복 처리 테스트 - 중복된 이메일로 계정 생성 시 번호가 추가된다")
   void registerAccount_UsernameDuplicateHandling() {
     // Given
-    AdminAccountCreateDTO createDTO1 = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO1 = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자1")
             .email("test@example.com")
             .phone("010-1111-1111")
             .role(AdminRole.STAFF)
             .build();
 
-    AdminAccountCreateDTO createDTO2 = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO2 = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자2")
             .email("test@example.com")
             .phone("010-2222-2222")
@@ -281,7 +281,7 @@ class AdminAuthServiceTest {
   @DisplayName("임시 비밀번호 생성 호출 검증 - PasswordUtil이 올바르게 호출된다")
   void registerAccount_TemporaryPasswordGeneration() {
     // Given
-    AdminAccountCreateDTO createDTO = AdminAccountCreateDTO.builder()
+    AdminAccountCreateResponseDTO createDTO = AdminAccountCreateResponseDTO.builder()
             .name("테스트 관리자")
             .email("test@example.com")
             .phone("010-1234-5678")

@@ -132,11 +132,10 @@ public class SecurityConfig {
                         // preflight 허용
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/admin/auth/**").permitAll()  // 인증 관련 API는 허용
+                        .requestMatchers("/api/admin/**").authenticated()  // 나머지 관리자 API는 인증 필요
 //                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/actuator/health").permitAll()
-                        // 관리자 API는 인증 필요 (권한까지 묶고 싶으면 .hasRole("ADMIN") 등으로)
-//                        .requestMatchers("/api/admin/**").authenticated()
                         // 그 외는 프로젝트 규칙에 맞게 정의
                         .anyRequest().authenticated()
                 )

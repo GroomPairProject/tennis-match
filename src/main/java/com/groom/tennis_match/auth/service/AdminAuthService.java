@@ -1,8 +1,10 @@
 package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
 import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.common.constant.ErrorCode;
@@ -35,7 +37,7 @@ public class AdminAuthService {
      * @param createDTO 계정 생성 정보
      * @return 발급된 계정 정보 (아이디, 임시 비밀번호 포함)
      */
-    public AdminAccountRegisterDTO registerAccount(AdminAccountCreateDTO createDTO) {
+    public AdminAccountRegisterDTO registerAccount(AdminAccountCreateResponseDTO createDTO) {
         // 현재 사용자 권한 확인
         AdminRole currentUserRole = securityContextUtil.getCurrentUserRole();
         String currentUsername = securityContextUtil.getCurrentUsername();
@@ -93,6 +95,39 @@ public class AdminAuthService {
                 .phone(savedAdmin.getPhone())
                 .role(createDTO.getRole())
                 .createdBy(currentUsername)
+                .build();
+    }
+
+    /**
+     * 자기 자신의 계정 만료 기능입니다.
+     * 권한을 확인하지 않습니다.
+     * @param accountDTO
+     * @return
+     */
+    public AdminAccountExpireResponseDTO withdrawAccount(AdminAccountExpireDTO accountDTO) {
+
+        accountDTO.getPassword();
+        String currentUsername = securityContextUtil.getCurrentUsername();
+
+        Admin currentUser = adminRepository.findByUsername(currentUsername).orElseThrow(
+                () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        if (passwordEncoder.matches(accountDTO.getPassword(), currentUser.getPassword())) {
+            if (accountDTO.getHardDelete()) {
+                adminRepository.delete(currentUser);
+            } else {
+                currentUser.setActive(false);
+                adminRepository.save(currentUser);
+            }
+        } else {
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        return AdminAccountExpireResponseDTO.builder()
+                .expired(true)
+                .hardDeleted(accountDTO.getHardDelete())
+                .username(currentUsername)
                 .build();
     }
 

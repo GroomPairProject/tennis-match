@@ -1,5 +1,6 @@
-package com.groom.tennis_match.auth.dto.request;
+package com.groom.tennis_match.domain.mypage.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Getter
@@ -7,13 +8,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class AdminProfileUpdateDTO {
+public class AdminProfileUpdateRequestDTO {
     private String username;
 
     private String name;
 
     private String phone;
 
+    @Email
     private String email;
 
     private String password;
