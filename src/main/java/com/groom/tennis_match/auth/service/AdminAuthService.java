@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,19 +41,19 @@ public class AdminAuthService {
         // 현재 사용자 권한 확인
         AdminRole currentUserRole = securityContextUtil.getCurrentUserRole();
         String currentUsername = securityContextUtil.getCurrentUsername();
-        
+
         // 권한 검증: 자신의 권한 이상으로 계정을 생성할 수 없음
         if (!currentUserRole.canManage(createDTO.getRole())) {
             throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "권한이 부족합니다. 자신의 권한 이상으로 계정을 생성할 수 없습니다.");
         }
-        
+
         // 임시 비밀번호 생성
         String temporaryPassword = passwordUtil.generateTemporaryPassword();
         String encodedPassword = passwordEncoder.encode(temporaryPassword);
-        
+
         // 사용자명 생성 (이메일 기반 또는 다른 로직)
         String username = generateUsername(createDTO.getEmail());
-        
+
         // Admin 엔티티 생성
         Admin admin = Admin.builder()
                 .username(username)
@@ -63,28 +65,28 @@ public class AdminAuthService {
                 .build();
 
         Admin savedAdmin = adminRepository.save(admin);
-        
+
         // 임시 비밀번호 생성 로그
         passwordUtil.logPasswordGeneration(username);
-        
+
         /*
          * TODO: 보안 정책 관련 이슈 처리 예정
          * 1. 이메일로 계정 정보 전송 및 비밀번호 변경 링크 발송
          *    - 발급된 아이디와 임시 비밀번호를 이메일로 안전하게 전송
          *    - 초기 로그인 후 비밀번호 변경 강제
          *    - 비밀번호 변경 링크 유효시간 설정 (예: 24시간)
-         * 
+         *
          * 2. 회원 비밀번호 정보 변경 보안 정책 적용
          *    - 임시 비밀번호 사용 기간 제한 (예: 7일)
          *    - 비밀번호 변경 히스토리 관리
          *    - 의심스러운 로그인 시도 감지 및 알림
-         * 
+         *
          * 3. 계정 발급 시 추가 보안 조치
          *    - 발급자 권한 로그 기록
          *    - 계정 발급 이력 추적
          *    - 발급된 계정의 초기 상태 관리
          */
-        
+
         return AdminAccountRegisterDTO.builder()
                 .username(savedAdmin.getUsername())
                 .temporaryPassword(temporaryPassword) // 발급된 임시 비밀번호 노출
@@ -129,25 +131,37 @@ public class AdminAuthService {
                 .build();
     }
 
-
-
     /**
      * 사용자명 생성 로직
      * @param email 이메일 주소
      * @return 생성된 사용자명
      */
     private String generateUsername(String email) {
-        // 이메일의 @ 앞 부분을 사용자명으로 사용
-        String baseUsername = email.split("@")[0];
-        
-        // 중복 체크 및 사용자명 생성
-        String username = baseUsername;
-        int counter = 1;
+        int strLength = 10; // 문자열 길이
+        int numLength = 3;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // 문자 집합
+        String numerous = "0123456789";
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(strLength+numLength);
+
+        // 문자열 생성
+        for (int i = 0; i < strLength; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            sb.append(characters.charAt(randomIndex));
+        }
+        // 숫자 생성
+        for (int i = 0; i < numLength; i++) {
+            int randomIndex = random.nextInt(numerous.length());
+            sb.append(numerous.charAt(randomIndex));
+        }
+
+        String username = sb.toString();
 
         if (adminRepository.existsByUsername(username)) {
             throw new BusinessException(ErrorCode.USER_CREATE_FAILED, "중복된 사용자 이름입니다.");
         }
-        
+
         return username;
     }
 
