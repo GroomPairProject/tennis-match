@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,12 +17,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFilter {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-    System.out.println("CustomUsernamePasswordAuthenticationFilter - attemptAuthentication START");
     UsernamePasswordAuthenticationToken authenticationToken = null;
 
     String userId = null;
@@ -38,7 +39,7 @@ public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticati
         userId = loginDto.getUsername();
         userPassword = loginDto.getPassword();
 
-        logger.info("JSON 접속. USERID : " + userId + ", USERPW : " + userPassword);
+        log.debug("user accessed - USERID : {}", userId);
       } catch(IOException e){
         e.printStackTrace();
       }
@@ -48,21 +49,20 @@ public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticati
       userId = obtainUsername(request);
       userPassword = obtainPassword(request);
 
-      logger.info("POST 접속. USERID : " + userId + ", USERPW : " + userPassword);
+      log.debug("user accessed - USERID : {}", userId);
     }
     else {
-      logger.error("POST / JSON 요청만 가능합니다.");
+      log.error("POST / JSON 요청만 가능합니다.");
       throw new AuthenticationServiceException("Authentication Method Not Supported : " + request.getMethod());
     }
 
     if(userId.equals("") || userPassword.equals("")){
-      System.out.println("ID 혹은 PW를 입력하지 않았습니다.");
+      log.warn("ID 혹은 PW를 입력하지 않았습니다.");
       throw new AuthenticationServiceException("ID 혹은 PW를 입력하지 않았습니다.");
     }
 
     authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPassword);
     this.setDetails(request, authenticationToken);
-    System.out.println("CustomUsernamePasswordAuthenticationFilter - attemptAuthentication END");
     return this.getAuthenticationManager().authenticate(authenticationToken);
 
   }
