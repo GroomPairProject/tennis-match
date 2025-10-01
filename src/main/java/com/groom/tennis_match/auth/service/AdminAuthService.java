@@ -180,15 +180,9 @@ public class AdminAuthService {
                                  String email,
                                  String phone) {
 
-//        // Admin 엔티티 생성
-//        Admin admin = Admin.builder()
-//                .username(username)
-//                .password(encodedPassword)
-//                .email(createDTO.getEmail())
-//                .name(createDTO.getName())
-//                .role(createDTO.getRole().name())
-//                .phone(createDTO.getPhone())
-//                .build();
+        if (adminRepository.existsByUsername(username)) {
+            throw new BusinessException(ErrorCode.USER_CREATE_FAILED, "중복된 사용자 이름입니다.");
+        }
 
         Admin admin = Admin.builder()
                 .username(username)
