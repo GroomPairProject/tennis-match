@@ -2,8 +2,8 @@ package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
 import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
-import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountCreateResponseDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
