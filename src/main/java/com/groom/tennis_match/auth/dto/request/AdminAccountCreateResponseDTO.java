@@ -2,6 +2,7 @@ package com.groom.tennis_match.auth.dto.request;
 
 import com.groom.tennis_match.auth.AdminRole;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 /**
@@ -17,12 +18,14 @@ public class AdminAccountCreateResponseDTO {
     /**
      * 사용자 이름
      */
+    @NotBlank
     private String name;
     
     /**
      * 이메일 주소
      */
     @Email
+    @NotBlank
     private String email;
     
     /**
