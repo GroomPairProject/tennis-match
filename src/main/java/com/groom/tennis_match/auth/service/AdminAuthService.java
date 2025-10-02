@@ -2,8 +2,8 @@ package com.groom.tennis_match.auth.service;
 
 import com.groom.tennis_match.auth.AdminRole;
 import com.groom.tennis_match.auth.dto.request.AdminAccountExpireDTO;
-import com.groom.tennis_match.auth.dto.response.AdminAccountCreateResponseDTO;
-import com.groom.tennis_match.auth.dto.request.AdminAccountRegisterDTO;
+import com.groom.tennis_match.auth.dto.request.AdminAccountCreateResponseDTO;
+import com.groom.tennis_match.auth.dto.response.AdminAccountRegisterDTO;
 import com.groom.tennis_match.auth.dto.response.AdminAccountExpireResponseDTO;
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
@@ -47,11 +47,16 @@ public class AdminAuthService {
             throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "권한이 부족합니다. 자신의 권한 이상으로 계정을 생성할 수 없습니다.");
         }
 
+        // 이메일 중복 검증
+        if (adminRepository.existsByEmail(createDTO.getEmail())) {
+            throw new BusinessException(ErrorCode.EMAIL_DUPLICATION);
+        }
+
         // 임시 비밀번호 생성
         String temporaryPassword = passwordUtil.generateTemporaryPassword();
         String encodedPassword = passwordEncoder.encode(temporaryPassword);
 
-        // 사용자명 생성 (이메일 기반 또는 다른 로직)
+        // 사용자명 생성
         String username = generateUsername(createDTO.getEmail());
 
         // Admin 엔티티 생성
@@ -180,15 +185,11 @@ public class AdminAuthService {
                                  String email,
                                  String phone) {
 
-//        // Admin 엔티티 생성
-//        Admin admin = Admin.builder()
-//                .username(username)
-//                .password(encodedPassword)
-//                .email(createDTO.getEmail())
-//                .name(createDTO.getName())
-//                .role(createDTO.getRole().name())
-//                .phone(createDTO.getPhone())
-//                .build();
+        if (adminRepository.existsByUsername(username)) {
+            throw new BusinessException(ErrorCode.USER_CREATE_FAILED);
+        } else if (adminRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.EMAIL_DUPLICATION);
+        }
 
         Admin admin = Admin.builder()
                 .username(username)

@@ -1,4 +1,4 @@
-package com.groom.tennis_match.auth.dto.request;
+package com.groom.tennis_match.auth.dto.response;
 
 import com.groom.tennis_match.auth.AdminRole;
 import lombok.*;
