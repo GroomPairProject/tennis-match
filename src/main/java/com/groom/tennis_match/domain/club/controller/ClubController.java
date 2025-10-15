@@ -49,7 +49,7 @@ public class ClubController {
     public ApiResponse<ClubResponseDTO> getClub(@PathVariable Long clubId) {
         log.info("클럽 조회 API 호출: ID={}", clubId);
         
-        ClubResponseDTO response = clubService.getMyClub();
+        ClubResponseDTO response = clubService.getMyClubById(clubId);
         return ApiResponse.success(response, SuccessCode.CLUB_READ_SUCCESS);
     }
 
@@ -61,7 +61,7 @@ public class ClubController {
     public ApiResponse<ClubResponseDTO> updateClub(@PathVariable Long clubId, @Valid @RequestBody ClubUpdateRequestDTO request) {
         log.info("클럽 수정 API 호출: ID={}, Name={}", clubId, request.getClubName());
         
-        ClubResponseDTO response = clubService.updateMyClub(request);
+        ClubResponseDTO response = clubService.updateMyClubById(clubId, request);
         return ApiResponse.success(response, SuccessCode.CLUB_UPDATE_SUCCESS);
     }
 
@@ -73,7 +73,7 @@ public class ClubController {
     public ApiResponse<Void> deleteClub(@PathVariable Long clubId) {
         log.info("클럽 삭제 API 호출: ID={}", clubId);
         
-        clubService.deleteMyClub();
+        clubService.deleteMyClubById(clubId);
         return ApiResponse.success(SuccessCode.CLUB_DELETE_SUCCESS);
     }
 }

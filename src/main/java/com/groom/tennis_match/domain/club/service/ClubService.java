@@ -98,6 +98,31 @@ public class ClubService {
         return ClubResponseDTO.from(club);
     }
 
+    /**
+     * 특정 클럽 ID로 내 클럽 조회 (권한 검증 포함)
+     */
+    public ClubResponseDTO getMyClubById(Long clubId) {
+        log.info("내 클럽 조회 요청: ID={}", clubId);
+
+        // 현재 인증된 관리자 정보 가져오기
+        Admin currentAdmin = securityContextUtil.getCurrentAdmin();
+        Long currentAdminId = currentAdmin.getAdminId();
+
+        // 관리자의 클럽 ID 조회
+        Long myClubId = clubUserRepository.findClubIdByAdminId(currentAdminId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        // 요청한 클럽 ID가 내 클럽 ID와 일치하는지 검증
+        if (!myClubId.equals(clubId)) {
+            throw new BusinessException(ErrorCode.CLUB_NOT_FOUND);
+        }
+
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        return ClubResponseDTO.from(club);
+    }
+
 
     /**
      * 내 클럽 수정
@@ -135,6 +160,46 @@ public class ClubService {
     }
 
     /**
+     * 특정 클럽 ID로 내 클럽 수정 (권한 검증 포함)
+     */
+    @Transactional
+    public ClubResponseDTO updateMyClubById(Long clubId, ClubUpdateRequestDTO request) {
+        log.info("내 클럽 수정 요청: ID={}, Name={}", clubId, request.getClubName());
+
+        // 현재 인증된 관리자 정보 가져오기
+        Admin currentAdmin = securityContextUtil.getCurrentAdmin();
+        Long currentAdminId = currentAdmin.getAdminId();
+
+        // 관리자의 클럽 ID 조회
+        Long myClubId = clubUserRepository.findClubIdByAdminId(currentAdminId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        // 요청한 클럽 ID가 내 클럽 ID와 일치하는지 검증
+        if (!myClubId.equals(clubId)) {
+            throw new BusinessException(ErrorCode.CLUB_NOT_FOUND);
+        }
+
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        // 클럽 정보 수정
+        club.updateClub(
+                request.getClubName(),
+                request.getCity(),
+                request.getDistrict(),
+                request.getAddressDetail(),
+                request.getClubGender(),
+                request.getCategory(),
+                request.getClubDiv(),
+                request.getRepresentativeName(),
+                request.getIsActive()
+        );
+
+        log.info("내 클럽 수정 완료: ID={}, Name={}", club.getClubId(), club.getClubName());
+        return ClubResponseDTO.from(club);
+    }
+
+    /**
      * 내 클럽 삭제 (탈퇴)
      */
     @Transactional
@@ -148,6 +213,40 @@ public class ClubService {
         // 관리자의 클럽 ID 조회
         Long clubId = clubUserRepository.findClubIdByAdminId(currentAdminId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        // 클럽 비활성화
+        club.changeActiveStatus(false);
+
+        // 관리자-클럽 관계 삭제
+        ClubUser clubUser = clubUserRepository.findByAdminId(currentAdminId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+        clubUserRepository.delete(clubUser);
+
+        log.info("내 클럽 삭제 완료: ID={}, Name={}", club.getClubId(), club.getClubName());
+    }
+
+    /**
+     * 특정 클럽 ID로 내 클럽 삭제 (권한 검증 포함)
+     */
+    @Transactional
+    public void deleteMyClubById(Long clubId) {
+        log.info("내 클럽 삭제 요청: ID={}", clubId);
+
+        // 현재 인증된 관리자 정보 가져오기
+        Admin currentAdmin = securityContextUtil.getCurrentAdmin();
+        Long currentAdminId = currentAdmin.getAdminId();
+
+        // 관리자의 클럽 ID 조회
+        Long myClubId = clubUserRepository.findClubIdByAdminId(currentAdminId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        // 요청한 클럽 ID가 내 클럽 ID와 일치하는지 검증
+        if (!myClubId.equals(clubId)) {
+            throw new BusinessException(ErrorCode.CLUB_NOT_FOUND);
+        }
 
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
