@@ -133,6 +133,7 @@ public class SecurityConfig {
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/auth/**").permitAll()  // 인증 관련 API는 허용
+                        .requestMatchers("/api/admin/users/**").hasRole("ADMIN")  // 관리자 목록 조회는 ADMIN 권한만
                         .requestMatchers("/api/admin/**").authenticated()  // 나머지 관리자 API는 인증 필요
 //                        .requestMatchers("/**").permitAll()
 //                        .requestMatchers("/actuator/health").permitAll()
