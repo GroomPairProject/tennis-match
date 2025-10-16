@@ -67,8 +67,20 @@ public enum SuccessCode {
     /** 매치 참가 성공 */
     MATCH_JOIN_SUCCESS("S405", "매치 참가가 성공적으로 완료되었습니다"),
     /** 매치 참가 취소 성공 */
-    MATCH_LEAVE_SUCCESS("S406", "매치 참가 취소가 성공적으로 완료되었습니다");
-    
+    MATCH_LEAVE_SUCCESS("S406", "매치 참가 취소가 성공적으로 완료되었습니다"),
+
+    // ==================== 스타디움 관련 ====================
+    /** 스타디움 생성 성공 */
+    STADIUM_CREATE_SUCCESS("S501", "스타디움이 성공적으로 생성되었습니다"),
+    /** 스타디움 조회 성공 */
+    STADIUM_READ_SUCCESS("S502", "스타디움 정보를 성공적으로 조회했습니다"),
+    /** 스타디움 수정 성공 */
+    STADIUM_UPDATE_SUCCESS("S503", "스타디움 정보가 성공적으로 수정되었습니다"),
+    /** 스타디움 삭제 성공 */
+    STADIUM_DELETE_SUCCESS("S504", "스타디움이 성공적으로 삭제되었습니다");
+
+
+
     /** 성공 코드 */
     private final String code;
     /** 성공 메시지 */
