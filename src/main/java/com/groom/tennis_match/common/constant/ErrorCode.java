@@ -104,6 +104,20 @@ public enum ErrorCode {
     /** 참가하지 않은 매치 */
     MATCH_NOT_JOINED(HttpStatus.BAD_REQUEST, "M009", "참가하지 않은 매치입니다."),
 
+    // ==================== 스타디움 관련 ====================
+    /** 스타디움을 찾을 수 없음 */
+    STADIUM_NOT_FOUND(HttpStatus.NOT_FOUND, "SD001", "스타디움을 찾을 수 없습니다."),
+    /** 스타디움 생성 실패 */
+    STADIUM_CREATE_FAILED(HttpStatus.BAD_REQUEST, "SD002", "스타디움 생성에 실패했습니다."),
+    /** 스타디움 수정 실패 */
+    STADIUM_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "SD003", "스타디움 수정에 실패했습니다."),
+    /** 스타디움 삭제 실패 */
+    STADIUM_DELETE_FAILED(HttpStatus.BAD_REQUEST, "SD004", "스타디움 삭제에 실패했습니다."),
+    /** 스타디움 중복 */
+    STADIUM_DUPLICATION(HttpStatus.CONFLICT, "SD005", "이미 존재하는 스타디움입니다."),
+    /** 스타디움 검색 실패 */
+    STADIUM_SEARCH_FAILED(HttpStatus.BAD_REQUEST, "SD006", "스타디움 검색에 실패했습니다."),
+
     // ==================== 검증 관련 ====================
     /** 입력값 검증 실패 */
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "V001", "입력값 검증에 실패했습니다."),
