@@ -29,7 +29,7 @@ public class AdminMyPageController {
   public ApiResponse<AdminProfileDTO> updateAdminProfile(
           @AuthenticationPrincipal Admin admin,
           @RequestBody AdminProfileUpdateRequestDTO requestDTO) {
-    adminMyPageService.updateAdminProfile(requestDTO, admin.getUsername());
+    adminMyPageService.updateAdminProfile(requestDTO, admin.getAdminId());
 
     return ApiResponse.success(SuccessCode.USER_UPDATE_SUCCESS);
   }
