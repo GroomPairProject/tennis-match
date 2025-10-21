@@ -72,6 +72,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
     public void applyProfileUpdate(AdminProfileUpdateRequestDTO dto,
                                    PasswordEncoder passwordEncoder) {
         if (dto.getName() != null) this.name = dto.getName();
+        if (dto.getUsername() != null) this.username = dto.getUsername();
         if (dto.getPhone() != null) this.phone = dto.getPhone();
         if (dto.getEmail() != null) this.email = dto.getEmail();
         if (dto.getProfileImageUrl() != null) this.profileImgUrl = dto.getProfileImageUrl();
