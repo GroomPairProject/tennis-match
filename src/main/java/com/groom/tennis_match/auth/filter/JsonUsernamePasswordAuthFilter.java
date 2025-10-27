@@ -70,7 +70,21 @@ public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticati
     this.setDetails(request, authenticationToken);
 
 
-    return this.getAuthenticationManager().authenticate(authenticationToken);
+    try {
+      return this.getAuthenticationManager().authenticate(authenticationToken);
+    } catch (BusinessException e) {
+      log.info(e.getMessage());
+      // AuthenticationFailureHandler를 직접 호출
+      try {
+        unsuccessfulAuthentication(request, response, new AuthenticationServiceException(e.getMessage(), e));
+      } catch (IOException ex) {
+        throw new RuntimeException(ex);
+      } catch (ServletException ex) {
+        throw new RuntimeException(ex);
+      }
+      return null;
+    }
+
 
   }
 
