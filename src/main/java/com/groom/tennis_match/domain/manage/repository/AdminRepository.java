@@ -19,16 +19,6 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     List<Admin> findByIsActiveTrue();
     
     /**
-     * 비활성화된 관리자 목록 조회
-     */
-    List<Admin> findByIsActiveFalse();
-    
-    /**
-     * 권한별 관리자 목록 조회
-     */
-    List<Admin> findByRole(com.groom.tennis_match.auth.AdminRole role);
-    
-    /**
      * 사용자명으로 관리자 조회
      */
     java.util.Optional<Admin> findByUsername(String username);
@@ -37,5 +27,12 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
      * 이메일로 관리자 조회
      */
     java.util.Optional<Admin> findByEmail(String email);
+    
+    // ==================== 검색 기능 ====================
+    
+    /**
+     * 사용자명으로 관리자 검색 (부분 일치, 활성화된 관리자만)
+     */
+    List<Admin> findByUsernameContainingIgnoreCaseAndIsActiveTrue(String username);
 }
 

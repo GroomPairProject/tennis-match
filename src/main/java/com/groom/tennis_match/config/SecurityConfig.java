@@ -20,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.http.HttpMethod;
 
 @Slf4j
 @Configuration
@@ -133,6 +134,7 @@ public class SecurityConfig {
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/auth/**").permitAll()  // 인증 관련 API는 허용
+                        .requestMatchers(HttpMethod.DELETE, "/api/admin/accounts/**").hasAnyRole("ADMIN", "CHIEF_MANAGER")  // 관리자 삭제는 ADMIN, CHIEF_MANAGER 권한만
                         .requestMatchers("/api/admin/users/**").hasRole("ADMIN")  // 관리자 목록 조회는 ADMIN 권한만
                         .requestMatchers("/api/admin/**").authenticated()  // 나머지 관리자 API는 인증 필요
 //                        .requestMatchers("/**").permitAll()

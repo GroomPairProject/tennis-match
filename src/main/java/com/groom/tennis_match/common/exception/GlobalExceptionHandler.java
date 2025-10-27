@@ -203,6 +203,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    /**
+     * 잘못된 인수 예외 (IllegalArgumentException)
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(
+            IllegalArgumentException e, HttpServletRequest request) {
+        log.error("IllegalArgumentException: {}", e.getMessage());
+
+        ErrorResponse response = ErrorResponse.builder()
+                .errorCode(ErrorCode.INVALID_INPUT_VALUE.getCode())
+                .message(ErrorCode.INVALID_INPUT_VALUE.getMessage())
+                .detail(e.getMessage())
+                .path(request.getRequestURI())
+                .timestamp(java.time.LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
         /**
          * 기타 모든 예외
          */
