@@ -2,17 +2,21 @@ package com.groom.tennis_match.config;
 
 import com.groom.tennis_match.auth.filter.JsonUsernamePasswordAuthFilter;
 import com.groom.tennis_match.auth.handler.*;
+import com.groom.tennis_match.auth.provider.CustomAuthenticationProvider;
+import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -28,6 +32,7 @@ import org.springframework.http.HttpMethod;
 public class SecurityConfig {
 
     private final AdminDetailsService userDetailsService;
+    private final AdminRepository adminRepository;
 
     // Password encoder
     @Bean
@@ -35,14 +40,22 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Dao provider
+//    // Dao provider
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder encoder) {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(userDetailsService);
+//        provider.setPasswordEncoder(encoder);
+//        return provider;
+//    }
+
+    // custom provider
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder encoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(encoder);
+    public AuthenticationProvider authenticationProvider(PasswordEncoder encoder) {
+        CustomAuthenticationProvider provider = new CustomAuthenticationProvider(userDetailsService, encoder, adminRepository);
         return provider;
     }
+
 
     // Success/Failure/Logout handlers
     @Bean
@@ -88,7 +101,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            DaoAuthenticationProvider daoProvider,
+            AuthenticationProvider authenticationProvider,
             AuthLogoutSuccessHandler logoutSuccessHandler,
             JsonUsernamePasswordAuthFilter jsonLoginFilter
     ) throws Exception {
@@ -143,7 +156,7 @@ public class SecurityConfig {
                 )
 
                 // 인증 Provider 등록
-                .authenticationProvider(daoProvider)
+                .authenticationProvider(authenticationProvider)
 
                 // 커스텀 JSON 로그인 필터를 UsernamePasswordAuthenticationFilter 위치에 삽입
                 .addFilterAt(jsonLoginFilter, UsernamePasswordAuthenticationFilter.class);

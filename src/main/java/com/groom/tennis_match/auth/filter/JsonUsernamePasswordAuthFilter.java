@@ -1,6 +1,8 @@
 package com.groom.tennis_match.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.groom.tennis_match.common.exception.BusinessException;
+import jakarta.servlet.ServletException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +17,7 @@ import org.springframework.util.MimeTypeUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,14 +59,32 @@ public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticati
       throw new AuthenticationServiceException("Authentication Method Not Supported : " + request.getMethod());
     }
 
-    if(userId.equals("") || userPassword.equals("")){
+    // id 혹은 password가 null일 시 null pointer exception 생성 가능. 검증 추가
+    // todo: issue - AdminLoginDTO의 @NotBlank가 사용되지 않는다.
+    if (userId == null || userId.isBlank() || userPassword == null || userPassword.isBlank()) {
       log.warn("ID 혹은 PW를 입력하지 않았습니다.");
       throw new AuthenticationServiceException("ID 혹은 PW를 입력하지 않았습니다.");
     }
 
     authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPassword);
     this.setDetails(request, authenticationToken);
-    return this.getAuthenticationManager().authenticate(authenticationToken);
+
+
+    try {
+      return this.getAuthenticationManager().authenticate(authenticationToken);
+    } catch (BusinessException e) {
+      log.info(e.getMessage());
+      // AuthenticationFailureHandler를 직접 호출
+      try {
+        unsuccessfulAuthentication(request, response, new AuthenticationServiceException(e.getMessage(), e));
+      } catch (IOException ex) {
+        throw new RuntimeException(ex);
+      } catch (ServletException ex) {
+        throw new RuntimeException(ex);
+      }
+      return null;
+    }
+
 
   }
 

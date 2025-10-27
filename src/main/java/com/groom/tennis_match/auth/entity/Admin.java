@@ -52,6 +52,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
     private short passwordMiss = 0;
 
     @Column(nullable = false)
+    @Setter
     @Builder.Default
     private boolean isLock = false;
 
@@ -83,7 +84,9 @@ public class Admin extends BaseTimeEntity implements UserDetails {
         }
     }
 
-
+    public void increasePasswordMiss() {
+        this.passwordMiss++;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,6 +103,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
         return this.username;
     }
 
+    // 계정 유효 기간 만료
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
@@ -107,9 +111,10 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return this.isLock();
     }
 
+    // 비밀번호 만료
     @Override
     public boolean isCredentialsNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
@@ -117,6 +122,6 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.isActive();
     }
 }
