@@ -87,7 +87,17 @@ public enum SuccessCode {
     /** 스타디움 수정 성공 */
     STADIUM_UPDATE_SUCCESS("S503", "스타디움 정보가 성공적으로 수정되었습니다"),
     /** 스타디움 삭제 성공 */
-    STADIUM_DELETE_SUCCESS("S504", "스타디움이 성공적으로 삭제되었습니다");
+    STADIUM_DELETE_SUCCESS("S504", "스타디움이 성공적으로 삭제되었습니다"),
+
+    // ==================== 코트 관련 ====================
+    /** 코트 생성 성공 */
+    COURT_CREATE_SUCCESS("S601", "코트가 성공적으로 생성되었습니다"),
+    /** 코트 조회 성공 */
+    COURT_READ_SUCCESS("S602", "코트 정보를 성공적으로 조회했습니다"),
+    /** 코트 수정 성공 */
+    COURT_UPDATE_SUCCESS("S603", "코트 정보가 성공적으로 수정되었습니다"),
+    /** 코트 삭제 성공 */
+    COURT_DELETE_SUCCESS("S604", "코트가 성공적으로 삭제되었습니다");
 
 
 

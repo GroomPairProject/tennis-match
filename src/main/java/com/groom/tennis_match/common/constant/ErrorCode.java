@@ -118,6 +118,20 @@ public enum ErrorCode {
     /** 스타디움 검색 실패 */
     STADIUM_SEARCH_FAILED(HttpStatus.BAD_REQUEST, "SD006", "스타디움 검색에 실패했습니다."),
 
+    // ==================== 코트 관련 ====================
+    /** 코트를 찾을 수 없음 */
+    COURT_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "코트을 찾을 수 없습니다."),
+    /** 코트 생성 실패 */
+    COURT_CREATE_FAILED(HttpStatus.BAD_REQUEST, "CT002", "코트 생성에 실패했습니다."),
+    /** 코트 수정 실패 */
+    COURT_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "CT003", "코트 수정에 실패했습니다."),
+    /** 코트 삭제 실패 */
+    COURT_DELETE_FAILED(HttpStatus.BAD_REQUEST, "CT004", "코트 삭제에 실패했습니다."),
+    /** 코트 중복 */
+    COURT_DUPLICATION(HttpStatus.CONFLICT, "CT005", "이미 존재하는 코트입니다."),
+    /** 코트 검색 실패 */
+    COURT_SEARCH_FAILED(HttpStatus.BAD_REQUEST, "CT006", "코트 검색에 실패했습니다."),
+
     // ==================== 검증 관련 ====================
     /** 입력값 검증 실패 */
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "V001", "입력값 검증에 실패했습니다."),
