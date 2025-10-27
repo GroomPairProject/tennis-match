@@ -21,7 +21,7 @@ public class AdminMyPageController {
   public ApiResponse<AdminProfileDTO> getAdminProfile(@AuthenticationPrincipal Admin admin) {
     return ApiResponse.success(
             adminMyPageService.getAdminProfile(admin.getUsername()),
-            SuccessCode.USER_UPDATE_SUCCESS);
+            SuccessCode.USER_READ_SUCCESS);
 
   }
 
