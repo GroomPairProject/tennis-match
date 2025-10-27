@@ -11,25 +11,25 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/admin/mypage")
 @RestController
 @RequiredArgsConstructor
 public class AdminMyPageController {
   private final AdminMyPageService adminMyPageService;
 
-  @GetMapping("/admin/mypage")
+  @GetMapping
   public ApiResponse<AdminProfileDTO> getAdminProfile(@AuthenticationPrincipal Admin admin) {
     return ApiResponse.success(
             adminMyPageService.getAdminProfile(admin.getUsername()),
-            SuccessCode.USER_UPDATE_SUCCESS);
+            SuccessCode.USER_READ_SUCCESS);
 
   }
 
-  @PutMapping("/admin/mypage")
+  @PutMapping
   public ApiResponse<AdminProfileDTO> updateAdminProfile(
           @AuthenticationPrincipal Admin admin,
           @RequestBody AdminProfileUpdateRequestDTO requestDTO) {
-    adminMyPageService.updateAdminProfile(requestDTO, admin.getUsername());
+    adminMyPageService.updateAdminProfile(requestDTO, admin.getAdminId());
 
     return ApiResponse.success(SuccessCode.USER_UPDATE_SUCCESS);
   }

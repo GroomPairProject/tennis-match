@@ -46,3 +46,7 @@ logging:
   level:
     org:
       mybatis: debug
+
+## front
+front:
+  url: http://localhost:3000
