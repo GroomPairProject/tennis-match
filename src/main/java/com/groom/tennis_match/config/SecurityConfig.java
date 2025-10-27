@@ -5,7 +5,6 @@ import com.groom.tennis_match.auth.handler.*;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,19 +19,13 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.List;
+import org.springframework.http.HttpMethod;
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Value("${front.url}")
-    private String frontUrl;  // application.yml의 front.url 주입
 
     private final AdminDetailsService userDetailsService;
 
@@ -101,14 +94,6 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
-                .cors(cors -> cors.configurationSource(request -> {
-                    var config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(frontUrl));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(List.of("*"));
-                    config.setAllowCredentials(true);
-                    return config;
-                }))
                 .securityContext(sc -> sc.requireExplicitSave(false))   // 세션 발급
                 // 세션 기반
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
@@ -148,6 +133,7 @@ public class SecurityConfig {
 //                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/auth/**").permitAll()  // 인증 관련 API는 허용
+                        .requestMatchers(HttpMethod.DELETE, "/api/admin/accounts/**").hasAnyRole("ADMIN", "CHIEF_MANAGER")  // 관리자 삭제는 ADMIN, CHIEF_MANAGER 권한만
                         .requestMatchers("/api/admin/users/**").hasRole("ADMIN")  // 관리자 목록 조회는 ADMIN 권한만
                         .requestMatchers("/api/admin/**").authenticated()  // 나머지 관리자 API는 인증 필요
 //                        .requestMatchers("/**").permitAll()

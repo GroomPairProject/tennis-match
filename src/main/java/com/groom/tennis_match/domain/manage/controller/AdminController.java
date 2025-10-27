@@ -4,7 +4,6 @@ import com.groom.tennis_match.domain.manage.dto.AdminListResponseDTO;
 import com.groom.tennis_match.domain.manage.service.AdminService;
 import com.groom.tennis_match.common.constant.SuccessCode;
 import com.groom.tennis_match.common.dto.ApiResponse;
-import com.groom.tennis_match.auth.AdminRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -28,7 +27,7 @@ public class AdminController {
      * 모든 관리자 목록 조회
      * GET /api/admin/users
      */
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<AdminListResponseDTO>>> getAllAdmins() {
         log.info("모든 관리자 목록 조회 API 호출");
         
@@ -36,46 +35,36 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(admins, SuccessCode.ADMIN_READ_SUCCESS));
     }
 
+
+    
+    // ==================== 검색 기능 ====================
+    
     /**
-     * 활성화된 관리자 목록 조회
-     * GET /api/admin/users/active
+     * 사용자명으로 관리자 검색
+     * GET /api/admin/users/search?username=admin
      */
-    @GetMapping("/active")
-    public ResponseEntity<ApiResponse<List<AdminListResponseDTO>>> getActiveAdmins() {
-        log.info("활성화된 관리자 목록 조회 API 호출");
+    @GetMapping("/users/search")
+    public ResponseEntity<ApiResponse<List<AdminListResponseDTO>>> searchAdminsByUsername(
+            @RequestParam String username) {
+        log.info("사용자명으로 관리자 검색 API 호출: username={}", username);
         
-        List<AdminListResponseDTO> admins = adminService.getActiveAdmins();
+        List<AdminListResponseDTO> admins = adminService.searchAdminsByUsername(username);
         return ResponseEntity.ok(ApiResponse.success(admins, SuccessCode.ADMIN_READ_SUCCESS));
     }
-
+    
+    // ==================== 삭제 기능 ====================
+    
     /**
-     * 비활성화된 관리자 목록 조회
-     * GET /api/admin/users/inactive
+     * 관리자 논리적 삭제
+     * DELETE /api/admin/accounts/{accountId}
      */
-    @GetMapping("/inactive")
-    public ResponseEntity<ApiResponse<List<AdminListResponseDTO>>> getInactiveAdmins() {
-        log.info("비활성화된 관리자 목록 조회 API 호출");
+    @DeleteMapping("/accounts/{accountId}")
+    public ResponseEntity<ApiResponse<Void>> deleteAdmin(@PathVariable Long accountId) {
+        log.info("관리자 논리적 삭제 API 호출: accountId={}", accountId);
         
-        List<AdminListResponseDTO> admins = adminService.getInactiveAdmins();
-        return ResponseEntity.ok(ApiResponse.success(admins, SuccessCode.ADMIN_READ_SUCCESS));
+        adminService.deleteAdmin(accountId);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.ADMIN_DELETE_SUCCESS));
     }
-
-    /**
-     * 권한별 관리자 목록 조회
-     * GET /api/admin/users/role/{role}
-     */
-    @GetMapping("/role/{role}")
-    public ResponseEntity<ApiResponse<List<AdminListResponseDTO>>> getAdminsByRole(@PathVariable String role) {
-        log.info("권한별 관리자 목록 조회 API 호출: role={}", role);
-        
-        try {
-            AdminRole adminRole = AdminRole.valueOf(role.toUpperCase());
-            List<AdminListResponseDTO> admins = adminService.getAdminsByRole(adminRole);
-            return ResponseEntity.ok(ApiResponse.success(admins, SuccessCode.ADMIN_READ_SUCCESS));
-        } catch (IllegalArgumentException e) {
-            log.warn("잘못된 권한 값: {}", role);
-            throw new IllegalArgumentException("잘못된 권한 값입니다. (ADMIN, CHIEF_MANAGER, MANAGER, STAFF)");
-        }
-    }
+    
 }
 
