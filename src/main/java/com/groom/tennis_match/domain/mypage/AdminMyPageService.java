@@ -2,6 +2,8 @@ package com.groom.tennis_match.domain.mypage;
 
 import com.groom.tennis_match.auth.entity.Admin;
 import com.groom.tennis_match.auth.repository.AdminRepository;
+import com.groom.tennis_match.common.constant.ErrorCode;
+import com.groom.tennis_match.common.exception.BusinessException;
 import com.groom.tennis_match.domain.mypage.dto.AdminProfileDTO;
 import com.groom.tennis_match.domain.mypage.dto.AdminProfileUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -46,16 +48,22 @@ public class AdminMyPageService {
    */
   @Transactional
   public AdminProfileDTO updateAdminProfile(AdminProfileUpdateRequestDTO requestDTO, Long requestUserId) {
-    String username = requestDTO.getUsername();
     Admin admin = adminRepository.findById(requestUserId)
             .orElseThrow(() -> {
               log.info("AdminDetailsService - 사용자 없음: UserId={}", requestUserId);
               return new UsernameNotFoundException("User not found: " + requestUserId);
             });
+
+    String username = requestDTO.getUsername();
+
+    if (username != null && adminRepository.findByUsername(username).isPresent()) {
+      throw new BusinessException(ErrorCode.USER_UPDATE_FAILED, "username duplicated");
+    }
+
     admin.applyProfileUpdate(requestDTO, passwordEncoder);
     adminRepository.save(admin);
 
-    return getAdminProfile(username);
+    return getAdminProfile(admin.getUsername());
 
   }
 }
