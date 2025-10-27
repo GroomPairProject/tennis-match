@@ -114,7 +114,9 @@ public class AdminAuthService {
         accountDTO.getPassword();
         String currentUsername = securityContextUtil.getCurrentUsername();
 
-        Admin currentUser = adminRepository.findByUsername(currentUsername).get();
+        Admin currentUser = adminRepository.findByUsername(currentUsername).orElseThrow(
+                () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
+        );
 
         if (passwordEncoder.matches(accountDTO.getPassword(), currentUser.getPassword())) {
             if (accountDTO.getHardDelete()) {

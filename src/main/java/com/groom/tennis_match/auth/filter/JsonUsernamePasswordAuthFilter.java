@@ -1,12 +1,9 @@
 package com.groom.tennis_match.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groom.tennis_match.auth.entity.Admin;
-import com.groom.tennis_match.auth.service.AdminDetailsService;
-import com.groom.tennis_match.common.constant.ErrorCode;
 import com.groom.tennis_match.common.exception.BusinessException;
+import jakarta.servlet.ServletException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +17,12 @@ import org.springframework.util.MimeTypeUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
 public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFilter {
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final AdminDetailsService adminDetailsService;
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -63,27 +59,17 @@ public class JsonUsernamePasswordAuthFilter extends UsernamePasswordAuthenticati
       throw new AuthenticationServiceException("Authentication Method Not Supported : " + request.getMethod());
     }
 
-    if(userId.equals("") || userPassword.equals("")){
+    // id 혹은 password가 null일 시 null pointer exception 생성 가능. 검증 추가
+    // todo: issue - AdminLoginDTO의 @NotBlank가 사용되지 않는다.
+    if (userId == null || userId.isBlank() || userPassword == null || userPassword.isBlank()) {
       log.warn("ID 혹은 PW를 입력하지 않았습니다.");
       throw new AuthenticationServiceException("ID 혹은 PW를 입력하지 않았습니다.");
     }
 
-    // isLock, isActive 검증
-    Admin admin = adminDetailsService.loadUserByUsername(userId);
-
-    if(admin.isLock()) {
-      log.debug("user locked");
-      throw new BusinessException(ErrorCode.ACCOUNT_LOCKED);
-    }
-
-    if(!admin.isActive()) {
-      log.debug("deleted user");
-      throw new BusinessException(ErrorCode.ACCOUNT_DISABLED);
-    }
-
-
     authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPassword);
     this.setDetails(request, authenticationToken);
+
+
     return this.getAuthenticationManager().authenticate(authenticationToken);
 
   }
