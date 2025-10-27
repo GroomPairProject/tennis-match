@@ -74,7 +74,7 @@ public class SecurityConfig {
             AuthFailureHandler failureHandler
     ) throws Exception {
         AuthenticationManager authManager = authConfig.getAuthenticationManager();
-        JsonUsernamePasswordAuthFilter filter = new JsonUsernamePasswordAuthFilter();
+        JsonUsernamePasswordAuthFilter filter = new JsonUsernamePasswordAuthFilter(userDetailsService);
         filter.setFilterProcessesUrl("/api/admin/auth/login");
         filter.setAuthenticationManager(authManager);
         filter.setUsernameParameter("username");
