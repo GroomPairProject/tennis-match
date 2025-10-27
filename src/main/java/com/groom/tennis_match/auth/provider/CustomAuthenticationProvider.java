@@ -1,6 +1,7 @@
 package com.groom.tennis_match.auth.provider;
 
 import com.groom.tennis_match.auth.entity.Admin;
+import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import com.groom.tennis_match.common.constant.ErrorCode;
 import com.groom.tennis_match.common.exception.BusinessException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
   private final AdminDetailsService adminDetailsService;
   private final PasswordEncoder passwordEncoder;
+  private final AdminRepository adminRepository;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,6 +30,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     Admin user = adminDetailsService.loadUserByUsername(username);
     if(!passwordEncoder.matches(password, user.getPassword())) {
+      user.increasePasswordMiss();
+      user.setLock(user.getPasswordMiss() >= 5); // 5회 이상 넘길 경우 잠금
+
+      adminRepository.save(user);
       throw new BusinessException(ErrorCode.LOGIN_FAILED);
     }
 

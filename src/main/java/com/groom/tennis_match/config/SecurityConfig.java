@@ -3,6 +3,7 @@ package com.groom.tennis_match.config;
 import com.groom.tennis_match.auth.filter.JsonUsernamePasswordAuthFilter;
 import com.groom.tennis_match.auth.handler.*;
 import com.groom.tennis_match.auth.provider.CustomAuthenticationProvider;
+import com.groom.tennis_match.auth.repository.AdminRepository;
 import com.groom.tennis_match.auth.service.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpMethod;
 public class SecurityConfig {
 
     private final AdminDetailsService userDetailsService;
+    private final AdminRepository adminRepository;
 
     // Password encoder
     @Bean
@@ -50,7 +52,7 @@ public class SecurityConfig {
     // custom provider
     @Bean
     public AuthenticationProvider authenticationProvider(PasswordEncoder encoder) {
-        CustomAuthenticationProvider provider = new CustomAuthenticationProvider(userDetailsService, encoder);
+        CustomAuthenticationProvider provider = new CustomAuthenticationProvider(userDetailsService, encoder, adminRepository);
         return provider;
     }
 

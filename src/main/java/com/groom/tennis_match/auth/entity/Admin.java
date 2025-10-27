@@ -52,6 +52,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
     private short passwordMiss = 0;
 
     @Column(nullable = false)
+    @Setter
     @Builder.Default
     private boolean isLock = false;
 
@@ -83,7 +84,9 @@ public class Admin extends BaseTimeEntity implements UserDetails {
         }
     }
 
-
+    public void increasePasswordMiss() {
+        this.passwordMiss++;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
